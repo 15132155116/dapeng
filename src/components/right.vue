@@ -2,63 +2,50 @@
     <div class="right">
         <righttop class="righttop"></righttop>
         <div class="choice">
-            <router-link to="/live">
+            <router-link to="/my/live">
                 <div class="tag live">
                     <i class="el-icon-video-play"></i><span>直播课程</span><br><br>
-                    <el-progress :percentage="percentage" :color="customColors"></el-progress>
+                    <el-progress :percentage="percentageA" :color="customColorA"></el-progress>
                 </div>
             </router-link>
-            <router-link to="/basic">
+            <router-link to="/my/basic">
                 <div class="tag basic">
                     <i class="el-icon-s-unfold"></i><span>录播课程</span><br><br>
-                    <el-progress :percentage="percentage" :color="customColor"></el-progress>
+                    <el-progress :percentage="percentageB" :color="customColorB"></el-progress>
                 </div>
             </router-link>
-            <router-view></router-view>
-        </div>
+        </div> 
+        <router-view></router-view>
     </div>
 </template>
 <script>
 import righttop from './right/righttop.vue'
+import Bus from "../Bus.js";
 export default {
     components:{
         righttop: righttop
     },
-        data() {
+    data() {
       return {
-        percentage: 20,
-        customColor: '#409eff',
-        customColors: [
-          {color: '#f56c6c', percentage: 20},
-          {color: '#e6a23c', percentage: 40},
-          {color: '#5cb87a', percentage: 60},
-          {color: '#1989fa', percentage: 80},
-          {color: '#6f7ad3', percentage: 100}
-        ]
+        percentageA: 0,
+        percentageB: 0,
+        customColorA: '#FCD4A3',
+        customColorB: '#B0E6FF'
       };
     },
-    methods: {
-      customColorMethod(percentage) {
-        if (percentage < 30) {
-          return '#909399';
-        } else if (percentage < 70) {
-          return '#e6a23c';
-        } else {
-          return '#67c23a';
-        }
-      },
-      increase() {
-        this.percentage += 10;
-        if (this.percentage > 100) {
-          this.percentage = 100;
-        }
-      },
-      decrease() {
-        this.percentage -= 10;
-        if (this.percentage < 0) {
-          this.percentage = 0;
-        }
-      }
+    mounted() {
+        Bus.$on("getStatus",(progress)=>{
+          console.log(111);
+          this.percentageA = progress*100
+        }),
+        Bus.$on("getClick",(b)=>{
+            console.log(222);
+            if(this.percentageB<100) {
+                this.percentageB += b*100
+            }else {
+                this.percentageB = 100
+            }
+        })
     }
 }
 
@@ -66,7 +53,7 @@ export default {
 <style>
 .right {
     width: 950px;
-    height: 195px;
+    /* height: 195px; */
     padding: 30px 10px 0;
 }
 .righttop {
@@ -84,7 +71,7 @@ a {
     text-decoration: none;
 }
 .tag {
-    width: 468px;
+    width: 463px;
     height: 180px;
     box-sizing: border-box;
     border-radius: 10px 10px 0 0;
@@ -103,6 +90,9 @@ a {
     background-color: #F58912;
 }
 .basic {
+    /* width: 458px;
+    height: 170px;
+    box-sizing: border-box; */
     background-color: #37C3FF;
 }
 </style>

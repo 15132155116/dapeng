@@ -6,8 +6,8 @@
                 <el-option
                     v-for="item in options"
                     :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                    :id="item.id"
+                    :value="item.name">
                 </el-option>
             </el-select>
         </div>
@@ -15,26 +15,40 @@
 </template>
 
 <script>
+  import Bus from "../../Bus.js";
+  let userid = document.cookie.substring(9,20);
+  // let defaultcourse;
   export default {
     data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
         value: ''
+      }
+    },
+    mounted() {
+      this.getCourses(userid);
+    },
+    methods: {
+      getCourses(pnum) {
+        this.$http.get("/getCourses",{
+          params: {
+            pnum:pnum
+          }
+        }).then((res)=>{
+          let list = res.data;
+          let arr = [];
+          for(let i=0;i<list.length;i++){
+            arr.push(list[i][0])
+          }
+          this.options = arr;
+          console.log(this.options);
+        })
+      }
+    },
+    watch: {
+      value:function(){
+        console.log(this.value);
+        Bus.$emit("getinset",this.value)
       }
     }
   }

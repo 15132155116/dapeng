@@ -1,30 +1,19 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <mainpart class="middle"></mainpart>
-    </div>
-    <!-- <router-view/> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import mainpart from './views/mainpart.vue'
+import login from './views/login.vue'
 export default {
   components: {
-    mainpart: mainpart
+    mainpart: mainpart,
+    login: login
   }
 }
 </script>
-
 <style>
-  #nav {
-    width: 1140px;
-    margin: 0 auto;
-  }
-  .middle {
-    width: 1140px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
 </style>
+

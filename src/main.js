@@ -3,7 +3,18 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import left from './components/left.vue'
+import righttop from "./components/right/righttop.vue"
+import live from "./components/right/live.vue"
+
+Vue.component("righttop", righttop)
+Vue.component("live", live)
+
+// 引入及配置axios
+import axios from "axios"
+axios.defaults.baseURL = "http://127.0.0.1:8000"
+Vue.prototype.$http = axios;
+
+
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -16,7 +27,7 @@ new Vue({
     store,
     render: h => h(App),
     components: {
-        left: left
+
     }
 
 }).$mount('#app')
